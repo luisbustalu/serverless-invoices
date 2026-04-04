@@ -22,7 +22,7 @@
                 {{ $t('by') }}
                 <a href="https://mokuapp.io/" class="text-secondary" target="_blank">Moku</a>.
             </small>
-            <a href="https://github.com/mokuappio/serverless-invoices"
+            <a href="https://github.com/luisbustalu/serverless-invoices"
                class="btn btn-sm btn--icon ml-0 ml-md-2"
                target="_blank"
                v-if="!isStorageWordpress">

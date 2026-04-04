@@ -124,33 +124,26 @@ export default {
       });
 
       await dispatch('invoiceClientFields/removeInvoiceClientFields', clonedInvoice.id, { root: true });
-      for (let i = 0; i < sourceInvoice.client_fields.length; i += 1) {
-        const field = sourceInvoice.client_fields[i];
-        await dispatch('invoiceClientFields/addInvoiceClientField', {
-          invoiceId: clonedInvoice.id,
-          props: {
-            label: field.label,
-            value: field.value,
-            client_field_id: field.client_field_id,
-          },
-        }, { root: true });
-      }
+      await Promise.all(sourceInvoice.client_fields.map(field => dispatch('invoiceClientFields/addInvoiceClientField', {
+        invoiceId: clonedInvoice.id,
+        props: {
+          label: field.label,
+          value: field.value,
+          client_field_id: field.client_field_id,
+        },
+      }, { root: true })));
 
       await dispatch('invoiceTeamFields/removeInvoiceTeamFields', clonedInvoice.id, { root: true });
-      for (let i = 0; i < sourceInvoice.team_fields.length; i += 1) {
-        const field = sourceInvoice.team_fields[i];
-        await dispatch('invoiceTeamFields/addInvoiceTeamField', {
-          invoiceId: clonedInvoice.id,
-          props: {
-            label: field.label,
-            value: field.value,
-            team_field_id: field.team_field_id,
-          },
-        }, { root: true });
-      }
+      await Promise.all(sourceInvoice.team_fields.map(field => dispatch('invoiceTeamFields/addInvoiceTeamField', {
+        invoiceId: clonedInvoice.id,
+        props: {
+          label: field.label,
+          value: field.value,
+          team_field_id: field.team_field_id,
+        },
+      }, { root: true })));
 
-      for (let i = 0; i < sourceInvoice.rows.length; i += 1) {
-        const sourceRow = sourceInvoice.rows[i];
+      await Promise.all(sourceInvoice.rows.map(async (sourceRow) => {
         const clonedRow = await InvoiceRow.createNew();
 
         await clonedRow.$update({
@@ -162,14 +155,14 @@ export default {
           order: sourceRow.order,
         });
 
-        sourceRow.taxes.forEach((tax) => {
+        await Promise.all(sourceRow.taxes.map((tax) => {
           const rowTax = new InvoiceRowTax();
           rowTax.label = tax.label;
           rowTax.value = tax.value;
           rowTax.row_id = clonedRow.id;
-          rowTax.$save();
-        });
-      }
+          return rowTax.$save();
+        }));
+      }));
 
       await dispatch('updateInvoice', {
         invoiceId: clonedInvoice.id,
