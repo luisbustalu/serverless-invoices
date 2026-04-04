@@ -48,10 +48,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import './assets/scss/variables';
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/bootstrap-vue/dist/bootstrap-vue.min.css';
-@import './assets/scss/app';
-</style>

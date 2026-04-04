@@ -1,4 +1,6 @@
 import 'es6-promise';
+import './assets/scss/main.scss';
+import 'bootstrap-vue/dist/bootstrap-vue.min.css';
 import VueProgressBar from 'vue-progressbar';
 import progressbarConfig from '@/config/progressbar.config';
 import '@/config/local-storage.config';

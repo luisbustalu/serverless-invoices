@@ -30,6 +30,7 @@
                     </b-dropdown-group>
                     <b-dropdown-divider/>
                     <b-dropdown-item-button @click="print">{{ $t('download_pdf') }}</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="cloneInvoice">{{ $t('clone_as_new') }}</b-dropdown-item-button>
                     <b-dropdown-item-button @click="deleteInvoice">{{ $t('delete') }}</b-dropdown-item-button>
                 </b-dropdown>
             </div>
@@ -121,6 +122,14 @@ export default {
     },
     print() {
       window.print();
+    },
+    async cloneInvoice() {
+      const id = await this.$store.dispatch('invoices/cloneInvoice', this.invoice.id);
+      NotificationService.success('Cloned');
+      this.$router.push({
+        name: 'invoice',
+        params: { id },
+      });
     },
   },
 };

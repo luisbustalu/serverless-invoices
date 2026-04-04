@@ -6,6 +6,7 @@
   "comfortable": "여백 늘리기",
   "customize": "사용자 지정하기",
   "download_pdf": "PDF 다운로드",
+  "clone_as_new": "새로운 송장 복사",
   "delete": "삭제하기",
   "delete_modal": {
     "title": "송장 삭제하기",

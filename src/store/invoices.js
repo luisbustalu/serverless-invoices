@@ -1,5 +1,7 @@
 import InvoiceService from '@/services/invoice.service';
 import Invoice from '@/store/models/invoice';
+import InvoiceRow from '@/store/models/invoice-row';
+import InvoiceRowTax from '@/store/models/invoice-row-tax';
 import { generateInvoiceNumber, pick } from '@/utils/helpers';
 import dayjs from 'dayjs';
 import Errors from '@/utils/errors';
@@ -9,6 +11,55 @@ function getInvoice(invoiceId) {
     .with(['client', 'client_fields', 'team_fields', 'rows.taxes'])
     .with('rows', query => query.orderBy('order', 'asc'))
     .find(invoiceId);
+}
+
+function getDueDays(invoice) {
+  if (!invoice || !invoice.issued_at || !invoice.due_at) {
+    return null;
+  }
+
+  const dueDays = dayjs(invoice.due_at)
+    .diff(invoice.issued_at, 'days');
+
+  return Number.isNaN(dueDays) ? null : dueDays;
+}
+
+function getClonedInvoiceProps(sourceInvoice, allInvoices) {
+  const dueDays = getDueDays(sourceInvoice);
+  const issuedAt = dayjs()
+    .format('YYYY-MM-DD');
+
+  return {
+    status: 'draft',
+    issued_at: issuedAt,
+    due_at: dayjs(issuedAt)
+      .add(dueDays !== null ? dueDays : 14, 'days')
+      .format('YYYY-MM-DD'),
+    number: generateInvoiceNumber(allInvoices),
+    is_compact: sourceInvoice.is_compact,
+    late_fee: sourceInvoice.late_fee,
+    currency: sourceInvoice.currency,
+    from_name: sourceInvoice.from_name,
+    from_address: sourceInvoice.from_address,
+    from_postal_code: sourceInvoice.from_postal_code,
+    from_city: sourceInvoice.from_city,
+    from_country: sourceInvoice.from_country,
+    from_county: sourceInvoice.from_county,
+    from_website: sourceInvoice.from_website,
+    from_email: sourceInvoice.from_email,
+    from_phone: sourceInvoice.from_phone,
+    bank_name: sourceInvoice.bank_name,
+    bank_account_no: sourceInvoice.bank_account_no,
+    client_name: sourceInvoice.client_name,
+    client_address: sourceInvoice.client_address,
+    client_postal_code: sourceInvoice.client_postal_code,
+    client_country: sourceInvoice.client_country,
+    client_county: sourceInvoice.client_county,
+    client_city: sourceInvoice.client_city,
+    client_email: sourceInvoice.client_email,
+    client_id: sourceInvoice.client_id,
+    notes: sourceInvoice.notes,
+  };
 }
 
 export default {
@@ -60,6 +111,71 @@ export default {
         invoiceId: invoice.id,
       });
       return invoice.id;
+    },
+    async cloneInvoice({ dispatch, getters }, sourceInvoiceId) {
+      const sourceInvoice = getInvoice(sourceInvoiceId) || await dispatch('getInvoice', sourceInvoiceId);
+      const clonedInvoice = await Invoice.createNew();
+
+      await InvoiceService.createInvoice(clonedInvoice);
+
+      await dispatch('invoiceProps', {
+        invoiceId: clonedInvoice.id,
+        props: getClonedInvoiceProps(sourceInvoice, getters.all),
+      });
+
+      await dispatch('invoiceClientFields/removeInvoiceClientFields', clonedInvoice.id, { root: true });
+      for (let i = 0; i < sourceInvoice.client_fields.length; i += 1) {
+        const field = sourceInvoice.client_fields[i];
+        await dispatch('invoiceClientFields/addInvoiceClientField', {
+          invoiceId: clonedInvoice.id,
+          props: {
+            label: field.label,
+            value: field.value,
+            client_field_id: field.client_field_id,
+          },
+        }, { root: true });
+      }
+
+      await dispatch('invoiceTeamFields/removeInvoiceTeamFields', clonedInvoice.id, { root: true });
+      for (let i = 0; i < sourceInvoice.team_fields.length; i += 1) {
+        const field = sourceInvoice.team_fields[i];
+        await dispatch('invoiceTeamFields/addInvoiceTeamField', {
+          invoiceId: clonedInvoice.id,
+          props: {
+            label: field.label,
+            value: field.value,
+            team_field_id: field.team_field_id,
+          },
+        }, { root: true });
+      }
+
+      for (let i = 0; i < sourceInvoice.rows.length; i += 1) {
+        const sourceRow = sourceInvoice.rows[i];
+        const clonedRow = await InvoiceRow.createNew();
+
+        await clonedRow.$update({
+          invoice_id: clonedInvoice.id,
+          item: sourceRow.item,
+          quantity: sourceRow.quantity,
+          price: sourceRow.price,
+          unit: sourceRow.unit,
+          order: sourceRow.order,
+        });
+
+        sourceRow.taxes.forEach((tax) => {
+          const rowTax = new InvoiceRowTax();
+          rowTax.label = tax.label;
+          rowTax.value = tax.value;
+          rowTax.row_id = clonedRow.id;
+          rowTax.$save();
+        });
+      }
+
+      await dispatch('updateInvoice', {
+        invoiceId: clonedInvoice.id,
+      });
+
+      return clonedInvoice.id;
     },
     invoiceProps(store, payload) {
       return Invoice.update({
