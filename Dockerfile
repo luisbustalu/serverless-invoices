@@ -1,7 +1,7 @@
 # docker build . -t mokuappio/serverless-invoices
 # docker run -p 80:8080 -d mokuappio/serverless-invoices
 
-FROM node:16
+FROM node:25.9.0
 
 RUN npm install -g http-server
 
