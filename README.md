@@ -74,16 +74,16 @@ npm run lint
 It is necessary to install Docker before running the following commands.
 
 ```
-git clone https://github.com/mokuappio/serverless-invoices.git
+git clone https://github.com/luisbustalu/serverless-invoices.git
 cd serverless-invoices.git
-docker build . -t mokuappio/serverless-invoices
-docker run -p 80:8080 -d --rm mokuappio/serverless-invoices
+docker build . -t luisbustalu/serverless-invoices
+docker run -p 80:8080 -d --rm luisbustalu/serverless-invoices
 ```
 
 It is possible to add an alias in your .bashrc/.zshrc file to launch the app on the fly.
 
 ```
-echo "alias serverless-invoices='docker run -p 80:8080 -d --rm mokuappio/serverless-invoices'" >> ~/.zshrc
+echo "alias serverless-invoices='docker run -p 80:8080 -d --rm luisbustalu/serverless-invoices'" >> ~/.zshrc
 source ~/.zshrc
 serverless-invoices
 ```
