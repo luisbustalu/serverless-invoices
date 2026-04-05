@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import NotificationService from '@/services/notification.service';
 import {
   BDropdown,
@@ -62,6 +62,9 @@ export default {
     AppSelect,
   },
   computed: {
+    ...mapState({
+      theme: state => state.themes.theme,
+    }),
     ...mapGetters({
       invoice: 'invoices/invoice',
     }),
@@ -121,7 +124,25 @@ export default {
       this.$store.commit('invoices/isCustomizationsModalOpen', true);
     },
     print() {
+      const previousTheme = this.theme || 'light';
+      const restoreTheme = () => {
+        this.$store.commit('themes/theme', previousTheme);
+        document.documentElement.setAttribute('data-theme', previousTheme);
+        window.removeEventListener('afterprint', restoreTheme);
+      };
+
+      if (previousTheme === 'dark') {
+        this.$store.commit('themes/theme', 'light');
+        document.documentElement.setAttribute('data-theme', 'light');
+        window.addEventListener('afterprint', restoreTheme);
+      }
+
       window.print();
+
+      // Some browsers may not fire afterprint reliably.
+      if (previousTheme === 'dark') {
+        setTimeout(restoreTheme, 200);
+      }
     },
     async cloneInvoice() {
       const id = await this.$store.dispatch('invoices/cloneInvoice', this.invoice.id);
