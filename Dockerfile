@@ -26,5 +26,5 @@ RUN npm run build
 # Choose what port to expose
 EXPOSE 8080
 
-# Run the app
-CMD ["http-server", "dist"]
+# Run the app as SPA and disable cache to avoid stale chunk references after updates
+CMD ["http-server", "dist", "-s", "-c-1"]
