@@ -3,8 +3,8 @@
   "new_invoice": "Nueva factura",
   "export": "Exportar",
   "import": "Importar",
-  "stats_amount_invoiced_this_year": "Amount invoiced this year",
-  "stats_invoices_created": "Invoices created",
-  "stats_invoices_pending": "Invoices pending",
-  "stats_invoices_paid": "Invoices paid"
+  "stats_amount_invoiced_this_year": "Importe facturado en este año",
+  "stats_invoices_created": "Facturas creadas",
+  "stats_invoices_pending": "Facturas pendientes",
+  "stats_invoices_paid": "Facturas pagadas"
 }

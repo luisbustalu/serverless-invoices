@@ -3,8 +3,8 @@
   "new_invoice": "신규 송장",
   "export": "내보내기",
   "import": "가져오기",
-  "stats_amount_invoiced_this_year": "Amount invoiced this year",
-  "stats_invoices_created": "Invoices created",
-  "stats_invoices_pending": "Invoices pending",
-  "stats_invoices_paid": "Invoices paid"
+  "stats_amount_invoiced_this_year": "이년동안 송장 발행 금액",
+  "stats_invoices_created": "송장 생성",
+  "stats_invoices_pending": "송장 대기",
+  "stats_invoices_paid": "송장 결제"
 }

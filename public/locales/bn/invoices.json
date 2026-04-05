@@ -3,8 +3,8 @@
   "new_invoice": "নতুন চালান",
   "export": "এক্সপোর্ট",
   "import": "ইমপোর্ট",
-  "stats_amount_invoiced_this_year": "Amount invoiced this year",
-  "stats_invoices_created": "Invoices created",
-  "stats_invoices_pending": "Invoices pending",
-  "stats_invoices_paid": "Invoices paid"
+  "stats_amount_invoiced_this_year": "এই বছরে চালান প্রদান করা হয়েছে",
+  "stats_invoices_created": "চালান তৈরি করা হয়েছে",
+  "stats_invoices_pending": "চালান বক্স প্রদান করা হয়েছে",
+  "stats_invoices_paid": "চালান প্রদান করা হয়েছে"
 }

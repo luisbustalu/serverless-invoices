@@ -3,8 +3,8 @@
   "new_invoice": "Neue Rechnung",
   "export": "Exportieren",
   "import": "Importieren",
-  "stats_amount_invoiced_this_year": "Amount invoiced this year",
-  "stats_invoices_created": "Invoices created",
-  "stats_invoices_pending": "Invoices pending",
-  "stats_invoices_paid": "Invoices paid"
+  "stats_amount_invoiced_this_year": "In diesem Jahr in Rechnungen eingerechnet",
+  "stats_invoices_created": "Rechnungen erstellt",
+  "stats_invoices_pending": "Rechnungen ausstehend",
+  "stats_invoices_paid": "Rechnungen bezahlt"
 }
