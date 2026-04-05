@@ -2,5 +2,9 @@
   "title": "Faturas",
   "new_invoice": "Nova Fatura",
   "export": "Exportar",
-  "import": "Importar"
+  "import": "Importar",
+  "stats_amount_invoiced_this_year": "Amount invoiced this year",
+  "stats_invoices_created": "Invoices created",
+  "stats_invoices_pending": "Invoices pending",
+  "stats_invoices_paid": "Invoices paid"
 }

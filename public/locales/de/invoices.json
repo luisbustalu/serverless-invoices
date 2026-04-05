@@ -2,5 +2,9 @@
   "title": "Rechnungen",
   "new_invoice": "Neue Rechnung",
   "export": "Exportieren",
-  "import": "Importieren"
+  "import": "Importieren",
+  "stats_amount_invoiced_this_year": "Amount invoiced this year",
+  "stats_invoices_created": "Invoices created",
+  "stats_invoices_pending": "Invoices pending",
+  "stats_invoices_paid": "Invoices paid"
 }

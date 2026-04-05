@@ -2,5 +2,9 @@
   "title": "송장 내역",
   "new_invoice": "신규 송장",
   "export": "내보내기",
-  "import": "가져오기"
+  "import": "가져오기",
+  "stats_amount_invoiced_this_year": "Amount invoiced this year",
+  "stats_invoices_created": "Invoices created",
+  "stats_invoices_pending": "Invoices pending",
+  "stats_invoices_paid": "Invoices paid"
 }
